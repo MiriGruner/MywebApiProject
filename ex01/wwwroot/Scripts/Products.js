@@ -1,8 +1,9 @@
 
-
+let cart = []
+let count = 0;
+var countProducts = 0
 
 async function filterProducts() {
-   // if(sessionStorage.getItem(""))
     const minPrice = document.getElementById("minPrice").value;
     const maxPrice = document.getElementById("maxPrice").value;
     const nameSearch = document.getElementById("nameSearch").value;
@@ -24,9 +25,14 @@ async function filterProducts() {
 }
 
 async function showProducts() {
+    if (sessionStorage.getItem("product")) { 
+        count = JSON.parse(sessionStorage.getItem("product")).length;
+        cart = JSON.parse(sessionStorage.getItem("product"))
+}
+    document.getElementById("ItemsCountText").innerHTML = count
     const data = await filterProducts();
-    c = data.length
-    document.getElementById("counter").innerHTML=c
+    countProducts = data.length;
+    document.getElementById("counter").innerHTML = countProducts
     document.getElementById("PoductList").replaceChildren([]);
     for ( let i = 0; i < data.length; i++) {
         drowProducts(data[i])
@@ -43,9 +49,7 @@ async function showProducts() {
      cln.querySelector("button").addEventListener('click', () => { addToCart(product) });
      document.getElementById("PoductList").appendChild(cln);
 }
-const cart = []
-var count = 0;
-var c = 0;
+;
 function addToCart(prod) {
     count++;
     document.getElementById("ItemsCountText").innerHTML=count
@@ -54,9 +58,18 @@ function addToCart(prod) {
 }
 
 async function getCategories() {
-    const res = await fetch(`/api/Category`);
-    const data = await res.json();
-    return data;
+    try {
+        const res = await fetch(`/api/Category`);
+        if (!res.ok) { 
+            throw new Error("error!!!");
+        }
+        const data = await res.json();
+        return data;
+    } catch (er) {
+        console.log("error",ee)
+    }
+    return null;
+    
 
 }
 

@@ -1,6 +1,7 @@
 using AutoMapper;
 using Entities;
 using Microsoft.EntityFrameworkCore;
+using NLog.Web;
 using project.Controllers;
 using project.middleware;
 using project.middlewares;
@@ -17,8 +18,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserServies, UserServies>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
-builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddTransient<IProductsRepository, ProductsRepository>();
+builder.Services.AddTransient<IProductService, ProductService>();
 
 builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
@@ -26,7 +27,8 @@ builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
-builder.Services.AddScoped<IRatingRepository, RatingRepository>();
+
+builder.Services.AddScoped<IRatingRepository,RatingRepository>();
 builder.Services.AddScoped<IRatingServies, RatingServies>();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -38,6 +40,7 @@ builder.Services.AddDbContext<Store21Context>();
 
 builder.Services.AddDbContext<Store21Context>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("School")));
 
+builder.Host.UseNLog();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

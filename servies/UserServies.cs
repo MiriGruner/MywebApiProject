@@ -21,7 +21,8 @@ namespace servies
 
         public async Task<User> CreateNewUser(User user)
         {
-            
+            if (await check(user.Password) <= 2)
+                return null;
             return await _userRepository.CreateNewUser(user);
         }
 
@@ -31,9 +32,9 @@ namespace servies
 
         }
 
-        public async Task<int> check(string Code)
+        public async Task<int> check(string password)
         {
-            var result = Zxcvbn.Core.EvaluatePassword(Code);
+            var result = Zxcvbn.Core.EvaluatePassword(password);
             return result.Score;
         }
 

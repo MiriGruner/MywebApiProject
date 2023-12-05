@@ -54,19 +54,18 @@ async function placeOrder() {
             body: JSON.stringify(order)
         })
         if (!response.ok)
-            alert("faild... try again")
-        else { 
+            throw new Error("error")
+       
             const res = await response.json();
             alert(`order number ${res.orderId} was recived sucssesfully`)
             sessionStorage.setItem("product", JSON.stringify(""))
             window.location.href ="ShoppingBag.html"
            
-        }
+        
     }
     catch (err) {
-        alert("err",err)
+        console.log("error",err)
 
     }
-    //let data = await res.json();
 
 }

@@ -21,11 +21,12 @@ namespace project.Controllers
     {
 
         private readonly IMapper _mapper;
+        private readonly IUserServies _UserServies;
+        private readonly ILogger _logger;
 
-     private readonly   IUserServies _UserServies;
-
-        public UserController(IUserServies UserServies,IMapper mapper)
+        public UserController(IUserServies UserServies,IMapper mapper,ILogger<UserController> logger)
         {
+            _logger = logger;
             _mapper = mapper;
             _UserServies = UserServies;
         }
@@ -34,7 +35,6 @@ namespace project.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> Get([FromBody] UserLoginDTO loginDTO)
         {
-            //User user = _mapper.Map<UserLoginDTO, User>(loginDTO);
             var userName = loginDTO.Email;
             var password = loginDTO.Password;
             User user = await _UserServies.getUserByUserNameAndPassword(userName, password);
@@ -50,22 +50,16 @@ namespace project.Controllers
         [HttpPost]
         public async Task<CreatedAtActionResult> Post([FromBody] UserDTO userDTO)
         {
-
-
              User user=_mapper.Map<UserDTO,User>(userDTO);
                  await _UserServies.CreateNewUser(user);
+            _logger.LogInformation($"new user crated {user}");
             return  CreatedAtAction(nameof(Get), new { id = user.UserId }, user);
-            
-
-
         }
         [HttpPost("check")]
         public async Task<int> Check([FromBody] string password)
         {
-            
             if (password != "")
-            {
-               
+            { 
                 return await _UserServies.check(password);
             }
             return -1;

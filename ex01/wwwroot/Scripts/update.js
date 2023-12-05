@@ -33,6 +33,9 @@ const update = async () => {
             body: JSON.stringify(User)
 
         });
+        if (!res.ok)
+         throw new Error("error")
+
         alert(userId + "updated sucssesfuly")
     } catch(er) {
         alert("error:"+er)

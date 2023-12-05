@@ -20,12 +20,11 @@
         <br />
 
         <label>סיסמא</label>  <br />
-        <input id="passwordRegister" />
+        <input id="passwordRegister" type="password" onchange="checkCode()"/>
         <br />
 
         <button onclick="checkCode()">בדיקת חוזק</button>
         <meter max="4" id="password-strength-meter"></meter>
-        <h6 id="password-strength-text"></h6>
 
 
 
@@ -51,7 +50,7 @@
         <br />
 
         <label>סיסמא</label>  <br />
-        <input id="passwordLogin" />
+        <input id="passwordLogin" type="password" />
         <br /><br /><br />
         <button id="login" onclick="login()"> התחבר</button>
     </div>

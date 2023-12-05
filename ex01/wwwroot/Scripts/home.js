@@ -6,6 +6,26 @@ const register = async () => {
     var firstName = document.getElementById("firstName").value
     var lastName = document.getElementById("lastName").value
     var user = { email, password, firstName, lastName }
+    var em = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!em.test(email)) {
+        alert("your email adress is not valid")
+        return;
+    }
+    if (firstName.length <3) {
+        alert("first name is too short")
+        return;
+    }
+
+    if (lastName.length <2) {
+        alert("last name is too short")
+        return;
+    }
+
+    if (lastName.length > 20) {
+        alert("last name is too long")
+        return;
+    }
+
     try {
         const res = await fetch('api/User', {
             method: 'POST',
@@ -20,7 +40,7 @@ const register = async () => {
         alert(`user ${dataPost.userId} created sucssesfuly. please login now`);
     }
     catch (er) {
-       alert(er.message)
+      console.log(er.message)
     }
 }
 var users;
@@ -51,40 +71,34 @@ const login = async () => {
         }
     }
     catch (er) {
-        alert(er.message)
+        console.log(er.message)
     }
     
 
 
 }
 const checkCode = async () => {
-    var strength = {
-        0: "Worst",
-        1: "Bad",
-        2: "Weak",
-        3: "Good",
-        4: "Strong"
-    }
     var meter = document.getElementById('password-strength-meter');
     var text = document.getElementById('password-strength-text');
     const Code = document.getElementById("passwordRegister").value;
-    const res = await fetch('api/User/check', {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(Code)
-    })
+    try {
+        const res = await fetch('api/User/check', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(Code)
+        })
+    
     if (!res.ok)
         throw new Error("error in adding your details to our site")
-    const data = await res.json();
-    if (data <= 2) alert("your password is weak!! try again")
-    meter.value = data;
-
-    if (Code !== "") {
-        text.innerHTML = "Strength: " + strength[data.score];
-    } else {
-        text.innerHTML = "";
+        const data = await res.json();
     }
+    catch (er) {
+        console.log("error",er)
+    }
+    if (data <= 2)
+        alert("your password is weak!! try again")
+    meter.value = data;
 
 }

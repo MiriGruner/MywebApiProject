@@ -16,7 +16,7 @@ namespace repository
         {
             _DbContext = dbContext;
         }
-
+        
         public async Task<IEnumerable<Product>> getAllProducts(string? desc,int? minPrice, int? maxPrice,
             int?[] categoryIds)
         {
@@ -28,8 +28,10 @@ namespace repository
                 .OrderBy(product => product.Price).Include(i=>i.Category);
             List<Product> products = await quary.ToListAsync();
             return products;
-            
-     
+        }
+        public async Task<Product> getProductById(int id)
+        {
+            return await _DbContext.Products.Where(p=>p.ProductId==id).FirstOrDefaultAsync();
         }
 
     }
